@@ -511,7 +511,15 @@ function App() {
           {/* Main Pages */}
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/candidates" element={<Candidates />} />
-          <Route path="/candidate-board" element={<CandidateBoard />} />
+          {/* <Route path="/candidate-board" element={<CandidateBoard />} /> */}
+          <Route
+  path="/candidate-board"
+  element={
+    <PrivateRoute>
+      <CandidateBoard />
+    </PrivateRoute>
+  }
+/>
 
           {/* Assessments */}
           <Route path="/assessments" element={<AssessmentPage />} />

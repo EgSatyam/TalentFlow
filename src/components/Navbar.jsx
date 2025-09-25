@@ -156,7 +156,7 @@ export default function Navbar() {
         <div className="flex h-20 items-center justify-between">
           {/* Logo Section */}
           <div className="flex items-center">
-            <Link to="/" className="group flex items-center space-x-4">
+            {/* <Link to="/" className="group flex items-center space-x-4"> */}
               {/* Premium Logo Icon */}
               <div className="relative">
                 <div className="w-12 h-12 bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 dark:from-slate-600 dark:via-slate-500 dark:to-slate-600 rounded-2xl flex items-center justify-center shadow-lg shadow-slate-600/25 group-hover:shadow-xl group-hover:shadow-slate-600/35 transition-all duration-300 group-hover:scale-105 border border-slate-500/20">
@@ -176,7 +176,7 @@ export default function Navbar() {
                   Hiring Platform
                 </span>
               </div>
-            </Link>
+            {/* </Link> */}
           </div>
 
           {/* Navigation Links */}

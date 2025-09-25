@@ -523,14 +523,14 @@ export default function Dashboard() {
               </div>
 
               {/* Settings */}
-              <button className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
+              {/* <button className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
                 <Settings className="w-5 h-5" />
-              </button>
+              </button> */}
 
               {/* Logout */}
-              <button className="p-2 text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors">
+              {/* <button className="p-2 text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors">
                 <LogOut className="w-5 h-5" />
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
@@ -589,13 +589,13 @@ export default function Dashboard() {
               <h3 className="text-xl font-semibold text-slate-800 dark:text-white">
                 Quick Access
               </h3>
-              <button
+              {/* <button
                 onClick={() => handleQuickAction("Create New Job")}
                 className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 hover:scale-105"
               >
                 <Plus className="w-4 h-4" />
                 <span>New Job</span>
-              </button>
+              </button> */}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -700,9 +700,9 @@ export default function Dashboard() {
                 ))}
               </div>
 
-              <button className="w-full mt-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+              {/* <button className="w-full mt-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
                 View All Activity →
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
