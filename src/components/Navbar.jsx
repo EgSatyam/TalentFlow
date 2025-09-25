@@ -224,7 +224,7 @@ export default function Navbar() {
             </Link>
             
             {/* Assessments */}
-            <Link 
+            {/* <Link 
               to="/assessments" 
               className="group relative px-6 py-3 rounded-2xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 font-medium transition-all duration-300 hover:bg-slate-50 dark:hover:bg-slate-800/50"
             >
@@ -235,7 +235,7 @@ export default function Navbar() {
                 Assessments
               </span>
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </Link>
+            </Link> */}
           </div>
 
           {/* Right Side Actions (unchanged) */}

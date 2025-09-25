@@ -15,8 +15,8 @@ export const db = new Dexie("TalentFlowDB");
 db.version(3).stores({
   jobs: "++id, title, slug, status, order, tags, location, mode, salary, experience, roleDescription, company",
   candidates: "++id, name, email, stage, jobId",
-  assessments: "++id, jobId, sections",
-  submissions: "++id, jobId, candidateId",
+  assessments: "++id, jobId, title, form",
+  submissions: "++id, jobId, candidateId, submittedAt",
   files: "++id, name, type, size",
 });
 

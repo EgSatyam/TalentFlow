@@ -1202,6 +1202,7 @@ export const handlers = [
 
   // ========== Jobs ==========
   http.get("/jobs", async ({ request }) => {
+    console.log("inside jobs")
     try {
       await simulateNetwork();
 
@@ -1333,86 +1334,221 @@ http.patch("/candidates/:id", async ({ params, request }) => {
     }
   }),
 
-  // ========== Assessments ==========
-  http.get("/assessments", async () => {
-    try {
-      await simulateNetwork();
-      const all = await db.assessments.toArray();
-      return HttpResponse.json({ data: all, total: all.length }, { status: 200 });
-    } catch (err) {
-      console.error("❌ Error fetching assessments", err);
-      return HttpResponse.json({ message: "Error fetching assessments" }, { status: 500 });
-    }
-  }),
+  // // ========== Assessments ==========
+  // http.get("/assessments", async () => {
+  //   try {
+  //     await simulateNetwork();
+  //     const all = await db.assessments.toArray();
+  //     return HttpResponse.json({ data: all, total: all.length }, { status: 200 });
+  //   } catch (err) {
+  //     console.error("❌ Error fetching assessments", err);
+  //     return HttpResponse.json({ message: "Error fetching assessments" }, { status: 500 });
+  //   }
+  // }),
 
-  http.get("/assessments/:jobId", async ({ params }) => {
-    try {
-      await simulateNetwork();
-      const assessment = await db.assessments
+  // http.get("/assessments/:jobId", async ({ params }) => {
+  //   try {
+  //     await simulateNetwork();
+  //     const assessment = await db.assessments
+  //       .where("jobId")
+  //       .equals(params.jobId) // jobId kept as string ("job-1")
+  //       .first();
+
+  //     return assessment
+  //       ? HttpResponse.json(assessment, { status: 200 })
+  //       : HttpResponse.json({ message: "Not found" }, { status: 404 });
+  //   } catch (err) {
+  //     console.error("❌ Error fetching assessment", err);
+  //     return HttpResponse.json({ message: "Error fetching assessment" }, { status: 500 });
+  //   }
+  // }),
+
+  // http.put("/assessments/:jobId", async ({ params, request }) => {
+  //   try {
+  //     await simulateNetwork();
+  //     const body = await request.json();
+  //     const jobId = params.jobId;
+
+  //     const existing = await db.assessments.where("jobId").equals(jobId).first();
+  //     if (existing) {
+  //       await db.assessments.update(existing.id, { ...body, jobId });
+  //       const updated = await db.assessments.get(existing.id);
+  //       return HttpResponse.json(updated, { status: 200 });
+  //     } else {
+  //       const id = await db.assessments.add({ jobId, ...body });
+  //       const created = await db.assessments.get(id);
+  //       return HttpResponse.json(created, { status: 201 });
+  //     }
+  //   } catch (err) {
+  //     console.error("❌ Error saving assessment", err);
+  //     return HttpResponse.json({ message: "Error saving assessment" }, { status: 500 });
+  //   }
+  // }),
+
+  // http.post("/assessments/:jobId/submit", async ({ params, request }) => {
+  //   try {
+  //     await simulateNetwork();
+  //     const body = await request.json();
+
+  //     const submission = {
+  //       jobId: params.jobId,
+  //       candidateId: body.candidateId ?? null,
+  //       response: body.response ?? body,
+  //       createdAt: new Date().toISOString(),
+  //     };
+
+  //     await db.submissions.add(submission);
+
+  //     return HttpResponse.json({ success: true }, { status: 201 });
+  //   } catch (err) {
+  //     console.error("❌ Error submitting assessment", err);
+  //     return HttpResponse.json({ message: "Error submitting assessment" }, { status: 500 });
+  //   }
+  // }),
+
+  // http.get("/assessments/:jobId/submissions", async ({ params }) => {
+  //   try {
+  //     await simulateNetwork();
+  //     const subs = await db.submissions.where("jobId").equals(params.jobId).toArray();
+  //     return HttpResponse.json(subs, { status: 200 });
+  //   } catch (err) {
+  //     console.error("❌ Error fetching submissions", err);
+  //     return HttpResponse.json({ message: "Error fetching submissions" }, { status: 500 });
+  //   }
+  // }),
+
+  http.get(
+      "/sample-assessments/:type",
+      async ({params}) => {
+        const type = params.type
+        console.log("/sample assesment: ", params.type)
+        // const { type } = request.params;
+        console.log("type: ", type);
+  
+        const map = {
+          frontend: 1,
+          backend: 2,
+          general: 3,
+        };
+  
+        const jobId = map[type];
+        if (!jobId) {
+          return new Response(
+            404,
+            { "Content-Type": "application/json" },
+            { error: `Sample assessment not found for type: ${type}` }
+          );
+        }
+  
+        const assessment = await db.assessments
+          .where("jobId")
+          .equals(jobId)
+          .first();
+        console.log("assessment: ", assessment)
+        if (!assessment) {
+          return new Response(
+            404,
+            { "Content-Type": "application/json" },
+            { error: `No assessment seeded for jobId: ${jobId}` }
+          );
+        }
+  
+        console.log("sample assessment:", assessment)
+        return HttpResponse.json(assessment.form);
+      }),
+      
+    // ✅ GET /assessments/:jobId
+    http.get(
+      "/assessments/:jobId",
+      async ({params,request}) => {
+        const jobId = params.jobId
+        // const { jobId }/ = request.params;
+        console.log("inside assessment", request)
+        console.log("Get assesment:", jobId)
+        const assessment = await db.assessments
         .where("jobId")
-        .equals(params.jobId) // jobId kept as string ("job-1")
+        .equals(Number(jobId))
         .first();
-
-      return assessment
-        ? HttpResponse.json(assessment, { status: 200 })
-        : HttpResponse.json({ message: "Not found" }, { status: 404 });
-    } catch (err) {
-      console.error("❌ Error fetching assessment", err);
-      return HttpResponse.json({ message: "Error fetching assessment" }, { status: 500 });
-    }
-  }),
-
-  http.put("/assessments/:jobId", async ({ params, request }) => {
-    try {
-      await simulateNetwork();
-      const body = await request.json();
-      const jobId = params.jobId;
-
-      const existing = await db.assessments.where("jobId").equals(jobId).first();
-      if (existing) {
-        await db.assessments.update(existing.id, { ...body, jobId });
-        const updated = await db.assessments.get(existing.id);
-        return HttpResponse.json(updated, { status: 200 });
-      } else {
-        const id = await db.assessments.add({ jobId, ...body });
-        const created = await db.assessments.get(id);
-        return HttpResponse.json(created, { status: 201 });
-      }
-    } catch (err) {
-      console.error("❌ Error saving assessment", err);
-      return HttpResponse.json({ message: "Error saving assessment" }, { status: 500 });
-    }
-  }),
-
-  http.post("/assessments/:jobId/submit", async ({ params, request }) => {
-    try {
-      await simulateNetwork();
-      const body = await request.json();
-
-      const submission = {
-        jobId: params.jobId,
-        candidateId: body.candidateId ?? null,
-        response: body.response ?? body,
-        createdAt: new Date().toISOString(),
-      };
-
-      await db.submissions.add(submission);
-
-      return HttpResponse.json({ success: true }, { status: 201 });
-    } catch (err) {
-      console.error("❌ Error submitting assessment", err);
-      return HttpResponse.json({ message: "Error submitting assessment" }, { status: 500 });
-    }
-  }),
-
-  http.get("/assessments/:jobId/submissions", async ({ params }) => {
-    try {
-      await simulateNetwork();
-      const subs = await db.submissions.where("jobId").equals(params.jobId).toArray();
-      return HttpResponse.json(subs, { status: 200 });
-    } catch (err) {
-      console.error("❌ Error fetching submissions", err);
-      return HttpResponse.json({ message: "Error fetching submissions" }, { status: 500 });
-    }
-  }),
+        
+        console.log("Get assesment: assesment",assessment)
+        if (!assessment) {
+          return new Response(
+            404,
+            { "Content-Type": "application/json" },
+            { error: `Assessment not found for jobId: ${jobId}` }
+          );
+        }
+  
+        return HttpResponse.json(assessment.form);
+      }),
+  
+    // PUT /assessments/:jobId
+    http.put(
+      "/assessments/:jobId",
+      async ({params, request}) => {
+        const { jobId } = params;
+        const data = JSON.parse(request.requestBody);
+  
+        console.log("[PUT /assessments] Incoming data:", jobId, data);
+  
+        // Check if an assessment already exists
+        const existing = await db.assessments.where("jobId").equals(Number(jobId)).first();
+  
+        if (existing) {
+          await db.assessments.update(existing.id, {
+            form: data,
+          });
+          console.log("[PUT /assessments] Updated existing assessment:", existing.id);
+        } else {
+          await db.assessments.add({
+            jobId: Number(jobId),
+            form: data,
+          });
+          console.log("[PUT /assessments] Inserted new assessment");
+        }
+  
+        const saved = await db.assessments.where("jobId").equals(Number(jobId)).first();
+        console.log("[PUT /assessments] Final saved assessment:", saved);
+  
+        return HttpResponse.json({ jobId: Number(jobId), form: data });
+      }),
+  
+    http.post(
+      "/assessments/:jobId/submit",
+      async ({request,params}) => {
+        const { jobId } = params;
+        const data = JSON.parse(request.requestBody);
+        const jobIdNum = Number(jobId);
+  
+        // Check if a submission already exists for this job + candidate
+        const existing = await db.submissions
+          .where({ jobId: jobIdNum, candidateId: data.candidateId })
+          .first();
+  
+        const submission = {
+          jobId: jobIdNum,
+          candidateId: data.candidateId,
+          response: data.response,
+          submittedAt: new Date().toISOString(),
+        };
+  
+        if (existing) {
+          await db.submissions.update(existing.id, submission);
+          console.log(
+            `[POST /assessments/${jobId}/submit] Updated submission for candidate ${data.candidateId}`
+          );
+        } else {
+          await db.submissions.add(submission);
+          console.log(
+            `[POST /assessments/${jobId}/submit] Created new submission for candidate ${data.candidateId}`
+          );
+        }
+  
+        return HttpResponse.json({
+          success: true,
+          jobId: jobIdNum,
+          candidateId: data.candidateId,
+          submittedAt: submission.submittedAt,
+        })
+      })
 ];

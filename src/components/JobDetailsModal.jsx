@@ -1,5 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
 export default function JobDetailsModal({ job, onClose }) {
   if (!job) return null;
+  const navigate = useNavigate();
+  const jobId = job.id
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
@@ -21,11 +25,18 @@ export default function JobDetailsModal({ job, onClose }) {
         </div>
         <div className="mt-6 flex justify-end">
           <button
+            onClick={() => navigate(`/assessments/${jobId}`)}
+            className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition"
+          >
+            Assingnment
+          </button>
+          <button
             onClick={onClose}
             className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition"
           >
             Close
           </button>
+
         </div>
       </div>
     </div>

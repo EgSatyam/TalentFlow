@@ -463,7 +463,7 @@
 
 
 import { useContext } from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Jobs from "./pages/Jobs/Jobs.jsx";
 import CandidateBoard from "./pages/candidates/CandidateBoard.jsx";
@@ -474,7 +474,7 @@ import Candidates from "./pages/candidates2/Candidates.jsx";
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import { ThemeContext } from "./contexts/ThemeContext";
-
+import AssessmentsBuilderRouterWrapper from "./pages/assessments/context/AssessmentsBuilderRouterWrapper.jsx";
 function PrivateRoute({ children }) {
   const isAuth = localStorage.getItem("isAuthenticated") === "true";
   return isAuth ? children : <Navigate to="/login" />;
@@ -483,7 +483,8 @@ function PrivateRoute({ children }) {
 function App() {
   const { theme } = useContext(ThemeContext);
   const location = useLocation();
-
+  const param =  useParams()
+  const jobId = param.jobId;
   const pageClasses =
     theme === "dark"
       ? "min-h-screen bg-gray-900 text-white"
@@ -522,7 +523,7 @@ function App() {
 />
 
           {/* Assessments */}
-          <Route path="/assessments" element={<AssessmentPage />} />
+          <Route path="/assessments/:jobId" element={< AssessmentsBuilderRouterWrapper jobId={jobId}/>} />
           <Route
             path="/assessments/:jobId/submissions"
             element={<SubmissionsPage />}
